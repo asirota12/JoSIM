@@ -1,0 +1,42 @@
+* directly coupled AQFP buffer
+B1        1          3          jmitll     area=1
+RB1       1          7          5.23      
+LRB1      7          3          0.086p    
+
+B2        2          5          jmitll     area=1
+RB2       2          8          5.23  
+LRB2      8          5         0.086p
+
+LG1       0          1          0.1p    
+LG2       0          2          0.1p
+
+Iin1       0          6         pwl(0 10u .95n 10u 1.05n -10u 2n -10u)
+L1        3          4          1.44p        
+L2        4          5          1.44p    
+Lq        4          0          5.4p
+Lin        6         4          11.9p
+Lout        4         11        2.5p
+Lout_imp    11        0         13.7p
+*lout is likely connected to another Lin 11.9 and Lq 5.4/3 paths, or 13.7pH more
+
+Lx1         9          10       1.44p
+Lx2         10          0       1.44p
+k1          Lx1         L1      1
+k2          Lx2         L2      1
+
+
+Pex         0           9       sin(pi pi 3G)
+*Pex         0           9       pwl(0 0 .5n 2*pi 1n 2*pi 1.5n 0 2n 0)
+
+
+.model jmitll jj(rtype=1, vg=2.8mV, cap=0.07pF, r0=160, rN=16, icrit=0.05mA)
+
+.tran 0.25p 2000p 0 0.25p
+.print PHASE Pex
+.print DEVI Lin
+.print DEVI Lout
+.print PHASE B1
+.print PHASE B2
+*.print DEVI L1
+*.print DEVI L2
+.end

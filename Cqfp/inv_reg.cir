@@ -1,0 +1,86 @@
+.include subs.cir
+*lcon is very important.
+.param Lcon=.1p
+.param Vmag=548m
+*1000m with 1.46 L
+.param Vfreq=1G
+*V = phi0/ (C 2pi f 2L) = 2.067E-15 / (10^-13 6.28)
+.param Imag=1m
+.param shift=166p
+*Imag -.6 w L = 1.46
+* clock network meanders
+
+Vex0      31    0     sin(0 Vmag Vfreq 0)
+Vex60     32    0     sin(0 Vmag Vfreq -5*shift)
+Vex120    33    0     sin(0 Vmag Vfreq -4*shift)
+Vex180    34    0     sin(0 Vmag Vfreq -3*shift)
+Vex240    35    0     sin(0 Vmag Vfreq -2*shift)
+Vex300    36    0     sin(0 Vmag Vfreq -1*shift)
+
+
+X1 cinv 31 34 5 6 
+X2 cinv 32 35 7 8
+X3 cinv 33 36 9 10
+X4 cinv 34 31 11 12
+X5 cinv 35 32 13 14
+x6 cinv 36 33 15 16
+
+X7 cinv 31 34 17 18 
+X8 cinv 32 35 19 20
+X9 cinv 33 36 21 22
+X10 cinv 34 31 23 24
+X11 cinv 35 32 25 26
+x12 cinv 36 33 27 28
+
+
+Iin1       0    5       cus(wform.txt .25p 1u)
+
+Lcon1   6   7   Lcon
+Lcon2   8   9   Lcon       
+Lcon3   10  11  Lcon
+Lcon4   12  13  Lcon
+Lcon5   14  15  Lcon
+
+Lcon6   16  17   Lcon
+Lcon7   18  19   Lcon       
+Lcon8   20  21  Lcon
+Lcon9   22  23  Lcon
+Lcon10  24  25  Lcon
+Lcon11  26  27  Lcon
+Lout    28  0   20p
+*Lout    16   0   20p
+
+.tran .25p 10n 0n 11p
+
+*.print DEVI Iex1
+*.print DEVI Iex2
+
+.print DEVI Vex0
+.print DEVI Iin1
+
+*.print DEVV Vex0
+*.print DEVI B1.X3
+*.print DEVV B1.X3
+.print DEVI Lst.X1
+*.print DEVI Lcon1
+.print DEVI Lst.X2
+*.print DEVI Lcon2
+.print DEVI Lst.X3
+*.print DEVI Lcon3
+.print DEVI Lst.X4
+*.print DEVI Lcon4
+.print DEVI Lst.X5
+*.print DEVI Lcon5
+.print DEVI Lst.X6
+.print DEVI Lst.X7
+.print DEVI Lst.X8
+.print DEVI Lst.X9
+.print DEVI Lst.X10
+.print DEVI Lst.X11
+.print DEVI Lst.X12
+*.print DEVI Lcon2
+*.print DEVI Lcon3
+*.print DEVI Lcon4
+.print DEVI Lout
+
+.end

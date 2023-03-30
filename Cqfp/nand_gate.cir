@@ -1,0 +1,80 @@
+.include subs.cir
+*lcon is very important.
+.param Lcon=.1p
+
+.param Lcl = 10p
+
+.param Vmag=548m
+*1000m with 1.46 L
+.param Vfreq=1G
+*V = phi0/ (C 2pi f 2L) = 2.067E-15 / (10^-13 6.28)
+.param Imag=1m
+.param shift=166p
+*Imag -.6 w L = 1.46
+* clock network meanders
+
+* in conventional aqfp, nand cell is built with two invererts, and cont1 and a branch
+
+
+Vex0        0    1     sin(0 Vmag Vfreq 0)
+Vex180      0    2     sin(0 Vmag Vfreq -3*shift)
+
+Vex60       0   21     sin(0 Vmag Vfreq shift)
+Vex240      0   22     sin(0 Vmag Vfreq -2*shift)
+
+
+
+Lv01     1   3  Lcl
+Lv02     1   4  Lcl
+Lv03     1   5  Lcl
+
+Lv1801   2      6   Lcl
+Lv1802   2      7   Lcl
+Lv1803   2      8   Lcl
+
+*Lv60    21      15  Lcl
+*Lv240   22      16  Lcl
+
+Lv04     21      15   Lcl
+Lv1804   22      16   Lcl
+
+Iin1    0   9   cus(wform1.txt .25p 1u)
+Iin3    0   12   cus(wform2.txt .25p 1u)
+
+X1 cinv 3 6 9 10
+X2 czero 4 7 11
+X3 cinv 5 8 12 13
+
+X4 cbranch 10 11 13 14
+
+Lcon 14 17 5p
+
+X5 cbuf 15 16 17 18
+
+Lout  18  0  5p
+
+.tran .25p 10n 1n 11p
+
+*.print DEVI Iex1
+*.print DEVI Iex2
+
+.print DEVI Vex0
+.print DEVI Vex60
+
+.print DEVI Iin1
+.print DEVI Iin3
+
+.print DEVI Lst.X1
+.print DEVI Lst.X2
+.print DEVI Lst.X3
+
+.print DEVI L1.X4
+.print DEVI L2.X4
+.print DEVI L3.X4
+
+.print DEVI Lcon
+
+.print DEVI Lst.X5
+.print DEVI Lout
+
+.end

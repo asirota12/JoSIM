@@ -1,0 +1,51 @@
+.include subs.cir
+*lcon is very important.
+.param Lcon=.1p
+.param Vmag=548m
+*1000m with 1.46 L
+.param Vfreq=1G
+*V = phi0/ (C 2pi f 2L) = 2.067E-15 / (10^-13 6.28)
+.param Imag=1m
+.param shift=166p
+*Imag -.6 w L = 1.46
+* clock network meanders
+
+V0      31    0     sin(0 Vmag Vfreq 0)
+V180    34    0     sin(0 Vmag Vfreq -3*shift)
+
+
+
+X1 cone 31 34 6 
+
+X2 czero 31 34 8
+
+
+Lone    6  0   20p
+Lzero    8  0   20p
+
+
+.tran .25p 10n 1n 11p
+
+*.print DEVI Iex1
+*.print DEVI Iex2
+
+.print DEVI V0
+*.print DEVI Iin1
+
+*.print DEVV Vex0
+
+*.print PHASE B1.X1
+*.print PHASE B2.X1
+
+*.print DEVI B1.X1
+*.print DEVI B2.X1
+
+
+*.print DEVI Lst.X1
+*.print DEVI Lcon1
+*.print DEVI Lst.X2
+
+.print DEVI Lzero
+.print DEVI Lone
+
+.end

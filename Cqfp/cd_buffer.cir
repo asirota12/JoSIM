@@ -1,0 +1,40 @@
+.include subs.cir
+*lcon is very important.
+.param Lcon=.1p
+.param Vmag=500m
+*1000m with 1.46 L
+.param Vfreq=1G
+.param Imag=.4m
+.param shift=166p
+*Imag -.6 w L = 1.46
+
+* I would like to make a plot of the output current vs the through current that would be differe
+
+
+* clock network meanders
+
+Vex0      31    0     sin(0 Vmag Vfreq)
+Vex180    34    0     sin(0 Vmag Vfreq 3*shift)
+
+X1 cbuf 31 34 1 2 
+
+*Iin1       0    5      pwl(0 10u .95n 10u 1.05n -10u 2n -10u)
+*Iin1       0    5      10u
+*Iin1       0    5       pwl(0 -20u 2.99n -20u 3n 20u 3.99n 20u 4n -20u)
+Iin1       0    1       cus(wform.txt .25p 1u)
+
+Lout    2  0   .1p
+
+.tran .25p 20n 1n 10p
+
+*.print DEVI Iex1
+*.print DEVI Iex2
+
+.print DEVI Vex0
+.print DEVI Iin1
+
+.print DEVI Lst.X1
+
+*.print DEVI Lout
+
+.end

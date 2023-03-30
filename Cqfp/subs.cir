@@ -1,0 +1,165 @@
+* directly coupled AQFP buffer
+
+.model jmitll jj(rtype=1, vg=2.8mV, cap=0.07pF, r0=160, rN=16, icrit=0.05mA)
+
+.subckt cbuf 10 11 6 12
+B1        1          3          jmitll     area=1
+*Lshun     1          3          5p
+
+RB1       1          7          5
+LRB1      7          3          0.086p    
+
+B2        2          5          jmitll     area=1
+RB2       2          8          5
+LRB2      8          5         0.086p
+
+LG1       0          1          0.01p    
+LG2       0          2          0.01p
+
+*Iin1       0          6         pwl(0 10u .95n 10u 1.05n -10u 2n -10u)
+
+* the number of clocks may be dependent on pulse width... which may be dependent on L ratios.
+* L = 1.46
+
+L1        3          4          3p
+L2        4          5          3p    
+Lq        13          0         5p
+Lin       6         4           10p
+Lout      13         12         10p
+Lst       4         13           .01p   
+
+
+*Lout_imp    12        0         13.7p
+*lout is likely connected to another Lin 11.9 and Lq 5.4/3 paths, or 13.7pH more
+
+Cx           3           10      100f
+Cx2          11          5       100f
+*Iex          10          11      sin(0 300u 1G)
+
+*Pex         0           9       sin(pi pi 3G)
+*Pex         0           9       pwl(0 0 .5n 2*pi 1n 2*pi 1.5n 0 2n 0)
+
+.ends
+
+.subckt cinv 10 11 6 12
+B1        1          3          jmitll     area=1
+RB1       1          7          5
+LRB1      7          3          0.086p    
+
+B2        2          5          jmitll     area=1
+RB2       2          8          5
+LRB2      8          5         0.086p
+
+LG1       9          1          0.01p    
+LG2       9          2          0.01p
+
+*Iin1       0          6         pwl(0 10u .95n 10u 1.05n -10u 2n -10u)
+
+* the number of clocks may be dependent on pulse width... which may be dependent on L ratios.
+* L = 1.46
+
+L1       3          4          3p
+L2       4          5          3p    
+Lq1      14         0         5p
+Lstin    14         4        .01p
+Lq2      13         0         5p
+
+Lin       6         14           2p
+Lout      13         12          2p
+Lst       9         13           .01p   
+
+
+*Lout_imp    12        0         13.7p
+*lout is likely connected to another Lin 11.9 and Lq 5.4/3 paths, or 13.7pH more
+
+Cx           3           10      100f
+Cx2          11          5       100f
+*Iex          10          11      sin(0 300u 1G)
+
+*Pex         0           9       sin(pi pi 3G)
+*Pex         0           9       pwl(0 0 .5n 2*pi 1n 2*pi 1.5n 0 2n 0)
+
+.ends
+
+.subckt czero 10 11 12
+B1        1          3          jmitll   area=1
+*Lshun     1          3          1p
+RB1       1          7          5
+LRB1      7          3          0.086p  
+
+B2        2          5          jmitll   area=1
+RB2       2          8          5
+LRB2      8          5         0.086p
+
+LG1       0          1          0.01p    
+LG2       0          2          0.01p
+
+*Iin1       0          6         pwl(0 10u .95n 10u 1.05n -10u 2n -10u)
+
+* the number of clocks may be dependent on pulse width... which may be dependent on L ratios.
+* L = 1.46
+
+L1        3          4          3p
+L2        4          5          3p    
+Lq        13          0         5p
+
+*Lcr      1           5          5p
+
+*Lin       0         4           10p
+*Lout      13         12         10p
+Lout      13         12         20p
+
+Lst       4         13           .01p   
+
+
+Cx           3           10      100f
+Cx2          11          5       100f
+*Iex          10          11      sin(0 300u 1G)
+
+*Pex         0           9       sin(pi pi 3G)
+*Pex         0           9       pwl(0 0 .5n 2*pi 1n 2*pi 1.5n 0 2n 0)
+
+.ends
+
+.subckt cone 10 11 12
+B1        1          3          jmitll     area=1
+RB1       1          7          5
+LRB1      7          3          0.086p    
+
+B2        2          5          jmitll     area=1
+RB2       2          8          5
+LRB2      8          5         0.086p
+
+LG1       9          1          0.01p    
+LG2       9          2          0.01p
+
+* the number of clocks may be dependent on pulse width... which may be dependent on L ratios.
+* L = 1.46
+
+L1       3          4          3p
+L2       4          5          3p    
+Lq1      14         0         5p
+Lstin    14         4        .01p
+Lq2      13         0         5p
+
+Lout      13         12          2p
+Lst       9         13           .01p   
+
+Cx           3           10      100f
+Cx2          11          5       100f
+
+.ends
+
+.subckt cbranch 1 2 3 4
+
+
+L1      1      5        10p
+L2      2      5        40p    
+L3      3      5        10p
+
+
+Lout    5      4        20p
+
+.ends
+
+.end
